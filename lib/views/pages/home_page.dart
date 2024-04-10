@@ -1,9 +1,11 @@
+import 'package:ar_market/controller/database_controller.dart';
 import 'package:ar_market/models/product.dart';
 import 'package:ar_market/utilities/assets_page.dart';
 import 'package:ar_market/utilities/routes.dart';
 import 'package:ar_market/views/widgets/search_anchor.dart';
 import 'package:ar_market/views/widgets/top_sale.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -18,6 +20,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final database = Provider.of<Database>(context);
 
     return Scaffold(
         body: ListView(
@@ -174,13 +177,27 @@ class _HomePageState extends State<HomePage> {
               child: SizedBox(
                 height: 400,
                 width: double.infinity,
-                child: ListView(
-                  scrollDirection: Axis.vertical,
-                  children: dummyProducts
-                      .map((e) => TopSSale(
-                            product: e,
-                          ))
-                      .toList(),
+                child: StreamBuilder<List<Product>>(
+                  stream: database.newProductsStream(),
+                  builder:
+                      (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.active) {
+                      final products = snapshot.data;
+                      if (products == null || products.isEmpty) {
+                        return const Center(child: Text("No Product Found"));
+                      }
+                      return ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          itemCount: products.length,
+                          itemBuilder: (_, int index) => Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: TopSSale(product: products[index]),
+                              ));
+                    }
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  },
                 ),
               ),
             ),
