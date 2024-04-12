@@ -36,11 +36,11 @@ class _BottomNavBarState extends State<ButtonNavBar> {
       ),
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
-          color: Colors.white54,
+          color: Colors.white,
           boxShadow: [
             BoxShadow(
-              blurRadius: 20,
-              color: Colors.blue,
+              blurRadius: 10,
+              color: Colors.deepPurple,
             )
           ],
         ),
