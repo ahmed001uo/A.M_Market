@@ -1,3 +1,6 @@
+import 'package:ar_market/controller/database_controller.dart';
+import 'package:ar_market/models/user_data.dart';
+import 'package:ar_market/utilities/constants.dart';
 import 'package:ar_market/utilities/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +16,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final database = FirestoreDatabase('123');
   Future signInWithGoogle() async {
     // Trigger the authentication flow
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
@@ -26,6 +30,11 @@ class _LoginPageState extends State<LoginPage> {
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
     );
+
+    await database.setUserData(UserData(
+      uid: documentIdFromLocalData(),
+      email: googleUser!.email,
+    ));
 
     // Once signed in, return the UserCredential
     return await FirebaseAuth.instance
