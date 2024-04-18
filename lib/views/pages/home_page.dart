@@ -25,6 +25,7 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
         body: ListView(
+      shrinkWrap: true,
       children: [
         Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -106,7 +107,6 @@ class _HomePageState extends State<HomePage> {
                                 padding: const EdgeInsets.all(8.0),
                                 child: ListItem(
                                   product: products[index],
-                                 
                                 ),
                               ));
                     }

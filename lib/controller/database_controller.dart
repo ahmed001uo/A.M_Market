@@ -7,8 +7,8 @@ import 'package:ar_market/utilities/firestore.dart';
 abstract class Database {
   Stream<List<Product>> salesProductsStream();
   Stream<List<Product>> newProductsStream();
-  Future<void> setUserData(UserData userData);
   Stream<List<AddToCartModel>> myProductsCart();
+  Future<void> setUserData(UserData userData);
   Future<void> addToCart(AddToCartModel product);
 }
 
@@ -23,10 +23,10 @@ class FirestoreDatabase implements Database {
 
   @override
   Stream<List<Product>> salesProductsStream() => _service.collectionsStream(
-      path: ApiPath.products(),
-      builder: (data, documentId) => Product.fromMap(data!, documentId),
-      queryBuilder: (query) => query.where("discountValue", isNotEqualTo: 0));
-
+        path: ApiPath.products(),
+        builder: (data, documentId) => Product.fromMap(data!, documentId),
+        queryBuilder: (query) => query.where("discountValue", isNotEqualTo: 0),
+      );
   @override
   Stream<List<Product>> newProductsStream() => _service.collectionsStream(
         path: ApiPath.products(),
@@ -37,16 +37,15 @@ class FirestoreDatabase implements Database {
         path: ApiPath.user(userData.uid),
         data: userData.toMap(),
       );
-
+  @override
+  Future<void> addToCart(AddToCartModel product) async => _service.setData(
+        path: ApiPath.addToCart(uid, product.id),
+        data: product.toMap(),
+      );
   @override
   Stream<List<AddToCartModel>> myProductsCart() => _service.collectionsStream(
         path: ApiPath.myProductsCart(uid),
         builder: (data, documentId) =>
             AddToCartModel.fromMap(data!, documentId),
-      );
-  @override
-  Future<void> addToCart(AddToCartModel product) async => _service.setData(
-        path: ApiPath.addToCart(uid, product.id),
-        data: product.toMap(),
       );
 }

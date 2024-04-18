@@ -1,3 +1,4 @@
+import 'package:ar_market/views/pages/cart_page.dart';
 import 'package:ar_market/views/pages/home_page.dart';
 import 'package:ar_market/views/pages/profile_page.dart';
 import 'package:flutter/material.dart';
@@ -20,10 +21,7 @@ class _BottomNavBarState extends State<ButtonNavBar> {
       'Shop',
       style: optionStyle,
     ),
-    Text(
-      'Cart',
-      style: optionStyle,
-    ),
+    CartPage(),
     ProfilePage()
   ];
 
