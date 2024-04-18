@@ -1,7 +1,13 @@
+import 'package:ar_market/controller/database_controller.dart';
+import 'package:ar_market/models/add_to_cart.dart';
 import 'package:ar_market/models/product.dart';
+import 'package:ar_market/utilities/constants.dart';
 import 'package:ar_market/views/widgets/drop_down_menu.dart';
 import 'package:ar_market/views/widgets/main_button.dart';
+import 'package:ar_market/views/widgets/main_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
 
 class ProductDetails extends StatefulWidget {
   final Product product;
@@ -17,9 +23,35 @@ class ProductDetails extends StatefulWidget {
 class _ProductDetailsState extends State<ProductDetails> {
   bool isFavorite = false;
   late String dropdownValue;
+  BuildContext? dialogContext;
+
+  Future<void> _addToCart(Database database) async {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    dialogContext = context;
+    try {
+      final addToCartProduct = AddToCartModel(
+        email: googleUser!.email,
+        id: documentIdFromLocalData(),
+        title: widget.product.title,
+        price: widget.product.price,
+        productId: widget.product.id,
+        imgUrl: widget.product.imgUrl,
+        size: dropdownValue,
+      );
+      await database.addToCart(addToCartProduct);
+    } catch (e) {
+      return MainDialog(
+        context: dialogContext!,
+        title: 'Error',
+        content: 'Couldn\'t adding to the cart, please try again!',
+      ).showAlertDialog();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final database = Provider.of<Database>(context);
     return Scaffold(
       appBar: AppBar(
         elevation: 2,
@@ -137,8 +169,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: MainButton(
-                      text: "Add to cart",
-                      onTap: () {},
+                      text: 'Add to cart',
+                      onTap: () => _addToCart(database),
                       hasCircularBorder: true,
                     ),
                   ),

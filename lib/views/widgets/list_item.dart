@@ -1,7 +1,9 @@
 
+import 'package:ar_market/controller/database_controller.dart';
 import 'package:ar_market/models/product.dart';
 import 'package:ar_market/utilities/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ListItem extends StatelessWidget {
   final Product product;
@@ -12,9 +14,11 @@ class ListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final database = Provider.of<Database>(context);
     return InkWell(
       onTap: () => Navigator.of(context)
-          .pushNamed(AppRoutes.productDetailsRoute, arguments: product),
+          .pushNamed(AppRoutes.productDetailsRoute, arguments: {'product': product,
+          'database': database,}),
       child: DecoratedBox(
         decoration: const BoxDecoration(),
         child: Column(

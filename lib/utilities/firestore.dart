@@ -5,6 +5,7 @@ class FirestoreServices {
   FirestoreServices._();
   static final instance = FirestoreServices._();
   final _fireStore = FirebaseFirestore.instance;
+
   Future<void> setData({
     required String path,
     required Map<String, dynamic> data,
