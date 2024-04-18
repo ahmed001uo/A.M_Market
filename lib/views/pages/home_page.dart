@@ -22,6 +22,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final database = Provider.of<Database>(context);
+    
 
     return Scaffold(
         body: ListView(
@@ -108,7 +109,7 @@ class _HomePageState extends State<HomePage> {
                                 child: ListItem(
                                   product: products[index],
                                 ),
-                              ));
+                              ),);
                     }
                     return const Center(
                       child: CircularProgressIndicator(),
