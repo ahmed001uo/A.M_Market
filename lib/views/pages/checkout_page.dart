@@ -1,5 +1,7 @@
 import 'package:ar_market/controller/database_controller.dart';
 import 'package:ar_market/models/delivery_method.dart';
+import 'package:ar_market/models/shipping_address.dart';
+import 'package:ar_market/utilities/routes.dart';
 import 'package:ar_market/views/widgets/chickout/checkout_order_details.dart';
 import 'package:ar_market/views/widgets/chickout/delivery_method_item.dart';
 import 'package:ar_market/views/widgets/chickout/payment_component.dart';
@@ -35,7 +37,45 @@ class CheckoutPage extends StatelessWidget {
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(height: 8.0),
-              const ShippingAddressComponent(),
+              StreamBuilder<List<ShippingAddress>>(
+                  stream: database.getShippingAddresses(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.active) {
+                      final shippingAddresses = snapshot.data;
+                      if (shippingAddresses == null ||
+                          shippingAddresses.isEmpty) {
+                        return Center(
+                          child: Column(
+                            children: [
+                              const Text('No Shipping Addresses!'),
+                              const SizedBox(height: 6.0),
+                              InkWell(
+                                onTap: () => Navigator.of(context).pushNamed(
+                                  AppRoutes.addShippingAddressRoute,
+                                  arguments: database,
+                                ),
+                                child: Text(
+                                  'Add new one',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelLarge!
+                                      .copyWith(
+                                        color: Colors.redAccent,
+                                      ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                      final shippingAddress = shippingAddresses.first;
+                      return ShippingAddressComponent(
+                          shippingAddress: shippingAddress);
+                    }
+                    return const Center(
+                      child: CircularProgressIndicator.adaptive(),
+                    );
+                  }),
               const SizedBox(height: 24.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -74,7 +114,7 @@ class CheckoutPage extends StatelessWidget {
                         );
                       }
                       return SizedBox(
-                        height: size.height * 0.13,
+                        height: size.height * 0.14,
                         child: ListView.builder(
                           itemCount: deliveryMethods.length,
                           scrollDirection: Axis.horizontal,
@@ -90,9 +130,9 @@ class CheckoutPage extends StatelessWidget {
                       child: CircularProgressIndicator.adaptive(),
                     );
                   }),
-              const SizedBox(height: 32.0),
+              const SizedBox(height: 10.0),
               const CheckoutOrderDetails(),
-              const SizedBox(height: 64.0),
+              const SizedBox(height: 20.0),
               MainButton(
                 text: 'Submit Order',
                 onTap: () {},

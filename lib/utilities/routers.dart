@@ -1,5 +1,6 @@
 import 'package:ar_market/controller/database_controller.dart';
 import 'package:ar_market/utilities/routes.dart';
+import 'package:ar_market/views/pages/chickout_page/add_shipping_address_page.dart';
 import 'package:ar_market/views/pages/home_page.dart';
 import 'package:ar_market/views/pages/login_page.dart';
 import 'package:ar_market/views/pages/navbar_page.dart';
@@ -35,24 +36,29 @@ Route<dynamic> onGenerate(RouteSettings settings) {
         settings: settings,
       );
 
-    //   case AppRoutes.shippingAddressesRoute:
-    //   final database = settings.arguments as Database;
-    //   return CupertinoPageRoute(
-    //     builder: (_) => Provider<Database>.value(
-    //       value: database,
-    //       child: const ShippingAddressesPage(),
-    //     ),
-    //     settings: settings,
-    //   );
+      // case AppRoutes.shippingAddressesRoute:
+      // final database = settings.arguments as Database;
+      // return CupertinoPageRoute(
+      //   builder: (_) => Provider<Database>.value(
+      //     value: database,
+      //     child: const ShippingAddressesPage(),
+      //   ),
+      //   settings: settings,
+      // );
     // case AppRoutes.paymentMethodsRoute:
     //   return CupertinoPageRoute(
     //     builder: (_) => const PaymentMethodsPage(),
     //     settings: settings,
     //   );
-    // case AppRoutes.addShippingAddressRoute:
-    //   final args = settings.arguments as AddShippingAddressArgs;
-    //   final database = args.database;
-    //   final shippingAddress = args.shippingAddress;
+      case AppRoutes.addShippingAddressRoute:
+      final database = settings.arguments as Database;
+      return CupertinoPageRoute(
+        builder: (_) => Provider<Database>.value(
+          value: database,
+          child: const AddShippingAddressPage(),
+        ),
+        settings: settings,
+      );
 
     case AppRoutes.topSaleRoute:
       return CupertinoPageRoute(
