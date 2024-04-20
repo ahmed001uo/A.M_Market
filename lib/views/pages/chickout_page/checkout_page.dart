@@ -1,6 +1,7 @@
 import 'package:ar_market/controller/database_controller.dart';
 import 'package:ar_market/models/delivery_method.dart';
 import 'package:ar_market/models/shipping_address.dart';
+import 'package:ar_market/utilities/args_models/add_shipping_address_args.dart';
 import 'package:ar_market/utilities/routes.dart';
 import 'package:ar_market/views/widgets/chickout/checkout_order_details.dart';
 import 'package:ar_market/views/widgets/chickout/delivery_method_item.dart';
@@ -52,7 +53,8 @@ class CheckoutPage extends StatelessWidget {
                               InkWell(
                                 onTap: () => Navigator.of(context).pushNamed(
                                   AppRoutes.addShippingAddressRoute,
-                                  arguments: database,
+                                  arguments: AddShippingAddressArgs(
+                                      database: database),
                                 ),
                                 child: Text(
                                   'Add new one',
@@ -85,7 +87,7 @@ class CheckoutPage extends StatelessWidget {
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {Navigator.of(context).pushNamed(AppRoutes.paymentMethodsRoute);},
                     child: Text(
                       'Change',
                       style: Theme.of(context).textTheme.labelLarge!.copyWith(
